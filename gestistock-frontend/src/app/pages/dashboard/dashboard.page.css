@@ -1,0 +1,26 @@
+.dashboard {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #0f1923;
+  color: white;
+  font-family: "DM Sans", sans-serif;
+}
+
+.card {
+  width: min(520px, 92vw);
+  background: #162130;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.card h1 {
+  margin: 0 0 0.6rem 0;
+  font-size: 1.6rem;
+}
+
+.card p {
+  margin: 0;
+  color: #8faab8;
+}
