@@ -1,7 +1,6 @@
 # --- JAVA / SPRING BOOT ---
 **/target/
 **/*.class
-**/.mvn/
 
 # --- ANGULAR / NODE ---
 **/node_modules/
