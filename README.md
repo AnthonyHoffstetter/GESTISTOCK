@@ -80,3 +80,11 @@ npm start
 ```
 
 ✅ Interface accessible sur : [http://localhost:4200](http://localhost:4200)
+
+---
+
+## Compte de démonstration
+
+Vous pouvez vous connecter avec :
+- Email : `admin@demo.local`
+- Mot de passe : `admin123`
