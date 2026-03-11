@@ -61,6 +61,9 @@ CREATE DATABASE gestistock_db;
 ./mvnw spring-boot:run
 ```
 
+> **Note :** En cas d'échec de la commande (Erreur SSL/PKIX) :
+                Si le réseau bloque le téléchargement via terminal, ouvrez le fichier GestistockBackendApplication.java dans VS Code et cliquez sur le bouton "Run" situé juste au-dessus de la méthode main. VS Code utilisera votre configuration Java locale pour démarrer le serveur.
+
 
 ✅ Serveur actif sur : [http://localhost:8080](http://localhost:8080)
 
