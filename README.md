@@ -9,9 +9,9 @@
 | Composant | Technologie | Version |
 | :--- | :--- | :--- |
 | **Frontend** | Angular (Teal Design System) | 17+ |
-| **Backend** | Spring Boot / Java | 3.4 / 21 |
+| **Backend** | Node.js / Express | 20+ LTS |
 | **Base de données** | MySQL | 8.0 |
-| **Sécurité** | Spring Security & JWT | — |
+| **Sécurité** | JWT | — |
 
 ---
 
@@ -19,7 +19,7 @@
 
 ```text
 GESTISTOCK/
-├── gestistock-backend/      # API REST Spring Boot (Port 8080)
+├── gestistock-backend/      # API REST Node.js/Express (Port 3000)
 ├── gestistock-frontend/     # Interface Utilisateur Angular (Port 4200)
 ├── .gitignore               # Configuration globale des exclusions Git
 └── README.md                # Documentation principale du projet
@@ -34,38 +34,33 @@ GESTISTOCK/
 Assurez-vous d'avoir installé :
 
 - **MySQL** (via WAMP, XAMPP ou installation directe)
-- **Node.js** (version LTS recommandée)
-- **Java JDK 21**
+- **Node.js** (version LTS recommandée) — [https://nodejs.org](https://nodejs.org)
 
 ---
 
 ### 2. Configuration de la Base de Données
 
 1. Lancez votre serveur MySQL.
-2. Créez la base de données vide :
-
-```sql
-CREATE DATABASE gestistock_db;
-```
-
-> **Note :** Le backend est configuré pour initialiser automatiquement les tables et les données via le fichiers `schema.sql` situés dans `src/main/resources`.
+2. La base de données `gestistock_db` est **créée automatiquement** au démarrage du backend, aucune manipulation manuelle n'est nécessaire.
 
 ---
 
 ### 3. Lancement du Backend (API)
 
 1. Ouvrez un terminal dans le dossier `gestistock-backend`.
-2. Lancez l'application via le wrapper Maven :
+2. Installez les dépendances *(uniquement lors du premier lancement)* :
 
 ```bash
-./mvnw spring-boot:run
+npm install
 ```
 
-> **Note :** En cas d'échec de la commande (Erreur SSL/PKIX) :
-                Si le réseau bloque le téléchargement via terminal, ouvrez le fichier GestistockBackendApplication.java dans VS Code et cliquez sur le bouton "Run" situé juste au-dessus de la méthode main. VS Code utilisera votre configuration Java locale pour démarrer le serveur.
+3. Lancez le serveur :
 
+```bash
+node server.js
+```
 
-✅ Serveur actif sur : [http://localhost:8080](http://localhost:8080)
+✅ Serveur actif sur : [http://localhost:3000](http://localhost:3000)
 
 ---
 
