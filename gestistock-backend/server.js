@@ -118,24 +118,10 @@ app.post('/auth/login', async (req, res) => {
       return res.status(403).json({ ok: false, message: 'Compte desactive.' });
     }
 
-    let isValid = false;
-
-    if (typeof user.mot_de_passe === 'string' && user.mot_de_passe.startsWith('$2')) {
-      isValid = await bcrypt.compare(password, user.mot_de_passe);
-    } else {
-      isValid = user.mot_de_passe === password;
-    }
+    const isValid = await bcrypt.compare(password, user.mot_de_passe);
 
     if (!isValid) {
       return res.status(401).json({ ok: false, message: 'Identifiants invalides.' });
-    }
-
-    if (!user.mot_de_passe.startsWith('$2')) {
-      const hashed = await bcrypt.hash(password, 10);
-      await dbPool.query('UPDATE utilisateur SET mot_de_passe = ? WHERE id_utilisateur = ?', [
-        hashed,
-        user.id_utilisateur
-      ]);
     }
 
     const token = jwt.sign(
