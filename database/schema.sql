@@ -8,18 +8,6 @@
   CONSTRAINT ck_utilisateur_role CHECK (role IN ('Admin', 'Mag'))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE administrateur (
-  id_administrateur BIGINT PRIMARY KEY,
-  CONSTRAINT fk_admin_utilisateur
-    FOREIGN KEY (id_administrateur) REFERENCES utilisateur(id_utilisateur)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE magasinier (
-  id_magasinier BIGINT PRIMARY KEY,
-  CONSTRAINT fk_magasinier_utilisateur
-    FOREIGN KEY (id_magasinier) REFERENCES utilisateur(id_utilisateur)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 CREATE TABLE categorie (
   id_categorie BIGINT AUTO_INCREMENT PRIMARY KEY,
   nom_categorie VARCHAR(150) NOT NULL UNIQUE
@@ -99,3 +87,6 @@ CREATE INDEX idx_ligne_bon_bon ON ligne_bon(id_bon);
 CREATE INDEX idx_ligne_bon_produit ON ligne_bon(id_produit);
 CREATE INDEX idx_mouvement_produit ON mouvement_stock(id_produit);
 CREATE INDEX idx_mouvement_utilisateur ON mouvement_stock(id_utilisateur);
+
+INSERT INTO utilisateur (nom_complet, email, mot_de_passe, role, statut)
+VALUES ('Admin Demo', 'admin@demo.local', 'admin123', 'Admin', TRUE);
