@@ -1,0 +1,137 @@
+.sidebar {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #041722 0%, #02111a 100%);
+  color: #e8f3f6;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 18px 14px;
+  position: sticky;
+  top: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px 22px;
+}
+
+.brand-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #0e9f9a;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-size: 16px;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.brand-text strong {
+  font-size: 0.95rem;
+}
+
+.brand-text span {
+  font-size: 0.72rem;
+  color: #86a5b2;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.menu-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: #c6d8df;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.menu-link:hover {
+  background: rgba(16, 155, 150, 0.12);
+  color: #ffffff;
+}
+
+.menu-link.active {
+  background: rgba(10, 129, 139, 0.22);
+  color: #11b7b1;
+}
+
+.icon {
+  width: 18px;
+  text-align: center;
+  opacity: 0.95;
+}
+
+.label {
+  font-size: 0.95rem;
+}
+
+.user-box {
+  margin-top: 18px;
+  padding: 14px 12px 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: #0e9f9a;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-info strong {
+  font-size: 0.82rem;
+}
+
+.user-info span {
+  font-size: 0.72rem;
+  color: #86a5b2;
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    padding-inline: 10px;
+  }
+
+  .brand-text,
+  .label,
+  .user-info {
+    display: none;
+  }
+
+  .brand,
+  .user-box {
+    justify-content: center;
+  }
+
+  .menu-link {
+    justify-content: center;
+  }
+}

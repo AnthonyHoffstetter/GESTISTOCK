@@ -1,0 +1,68 @@
+<div class="categories-page">
+  <header class="page-header">
+    <div>
+      <h1>Catégories</h1>
+      <p>Gestion des catégories de produits</p>
+    </div>
+  </header>
+
+  <section class="page-grid">
+    <article class="panel">
+      <div class="panel-header">
+        <h2>Ajouter une catégorie</h2>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="addCategory()" class="category-form">
+        <label for="nom_categorie">Nom de la catégorie</label>
+        <input
+          id="nom_categorie"
+          type="text"
+          formControlName="nom_categorie"
+          placeholder="Ex: Matériaux"
+        />
+
+        <div class="field-error" *ngIf="isFieldInvalid('nom_categorie')">
+          Le nom de la catégorie est obligatoire.
+        </div>
+
+        <button type="submit" [disabled]="saving()">
+          {{ saving() ? 'Ajout...' : 'Ajouter' }}
+        </button>
+      </form>
+
+      <div class="message success" *ngIf="success()">
+        {{ success() }}
+      </div>
+
+      <div class="message error" *ngIf="error()">
+        {{ error() }}
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-header">
+        <h2>Liste des catégories</h2>
+      </div>
+
+      <div *ngIf="loading()" class="empty-state">
+        Chargement des catégories...
+      </div>
+
+      <div *ngIf="!loading() && categories.length === 0" class="empty-state">
+        Aucune catégorie disponible.
+      </div>
+
+      <div *ngIf="!loading() && categories.length > 0" class="category-list">
+        <div class="category-item" *ngFor="let category of categories">
+          <div>
+            <strong>{{ category.nom_categorie }}</strong>
+          </div>
+
+          <button class="delete-btn" type="button" (click)="deleteCategory(category)">
+            Supprimer
+          </button>
+        </div>
+      </div>
+    </article>
+  </section>
+</div>

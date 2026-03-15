@@ -1,0 +1,121 @@
+<div class="products-page">
+  <header class="page-header">
+    <div>
+      <h1>Produits</h1>
+      <p>Gestion des produits en stock</p>
+    </div>
+  </header>
+
+  <section class="page-grid">
+    <article class="panel">
+      <div class="panel-header">
+        <h2>Ajouter un produit</h2>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="addProduct()" class="product-form">
+        <div class="form-grid">
+          <div class="field full">
+            <label for="reference">Référence</label>
+            <input id="reference" type="text" formControlName="reference" placeholder="Ex: PROD-001" />
+          </div>
+
+          <div class="field full">
+            <label for="nom_produit">Nom du produit</label>
+            <input id="nom_produit" type="text" formControlName="nom_produit" placeholder="Ex: Ciment CPJ 45" />
+          </div>
+
+          <div class="field full">
+            <label for="description">Description</label>
+            <textarea id="description" rows="3" formControlName="description" placeholder="Description du produit"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="prix">Prix</label>
+            <input id="prix" type="number" formControlName="prix" />
+          </div>
+
+          <div class="field">
+            <label for="quantite_stock">Quantité en stock</label>
+            <input id="quantite_stock" type="number" formControlName="quantite_stock" />
+          </div>
+
+          <div class="field">
+            <label for="stock_minimum">Stock minimum</label>
+            <input id="stock_minimum" type="number" formControlName="stock_minimum" />
+          </div>
+
+          <div class="field">
+            <label for="id_categorie">Catégorie</label>
+            <select id="id_categorie" formControlName="id_categorie">
+              <option value="">Choisir une catégorie</option>
+              <option *ngFor="let category of categories" [value]="category.id_categorie">
+                {{ category.nom_categorie }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-error" *ngIf="form.invalid && form.touched">
+          Merci de remplir correctement les champs obligatoires.
+        </div>
+
+        <button type="submit" [disabled]="saving()">
+          {{ saving() ? 'Ajout...' : 'Ajouter le produit' }}
+        </button>
+      </form>
+
+      <div class="message success" *ngIf="success()">
+        {{ success() }}
+      </div>
+
+      <div class="message error" *ngIf="error()">
+        {{ error() }}
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-header">
+        <h2>Liste des produits</h2>
+      </div>
+
+      <div *ngIf="loading()" class="empty-state">
+        Chargement des produits...
+      </div>
+
+      <div *ngIf="!loading() && products.length === 0" class="empty-state">
+        Aucun produit disponible.
+      </div>
+
+      <div *ngIf="!loading() && products.length > 0" class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Référence</th>
+              <th>Nom</th>
+              <th>Catégorie</th>
+              <th>Prix</th>
+              <th>Stock</th>
+              <th>Min</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of products">
+              <td>{{ product.reference }}</td>
+              <td>{{ product.nom_produit }}</td>
+              <td>{{ product.nom_categorie }}</td>
+              <td>{{ product.prix }} €</td>
+              <td>{{ product.quantite_stock }}</td>
+              <td>{{ product.stock_minimum }}</td>
+              <td>
+                <button class="delete-btn" type="button" (click)="deleteProduct(product)">
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+</div>

@@ -1,0 +1,29 @@
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-logo">⬢</div>
+    <div class="brand-text">
+      <strong>GESTISTOCK</strong>
+      <span>Gestion de Stock</span>
+    </div>
+  </div>
+
+  <nav class="menu">
+    <a
+      *ngFor="let item of menuItems"
+      [routerLink]="item.path"
+      routerLinkActive="active"
+      class="menu-link"
+    >
+      <span class="icon">{{ item.icon }}</span>
+      <span class="label">{{ item.label }}</span>
+    </a>
+  </nav>
+
+  <div class="user-box">
+    <div class="avatar">JB</div>
+    <div class="user-info">
+      <strong>Julien B.</strong>
+      <span>Admin</span>
+    </div>
+  </div>
+</aside>

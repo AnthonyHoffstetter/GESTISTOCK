@@ -72,7 +72,7 @@ export class LoginPage {
 
       localStorage.setItem('gestistock_token', response.token);
 
-      await this.router.navigateByUrl('/dashboard');
+      await this.router.navigateByUrl('/app/dashboard');
     } catch (err) {
       if (err instanceof HttpErrorResponse) {
         const apiMessage = err.error?.message;
