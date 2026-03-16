@@ -7,6 +7,7 @@ const dashboardRoutes = require('./routes/dashboard');
 const categoriesRoutes = require('./routes/categories');
 const productsRoutes = require('./routes/products');
 const stockInRoutes = require('./routes/stock-in');
+const stockOutRoutes = require('./routes/stock-out');
 
 const app = express();
 
@@ -23,5 +24,6 @@ app.use('/dashboard', dashboardRoutes);
 app.use('/categories', categoriesRoutes);
 app.use('/products', productsRoutes);
 app.use('/stock-in', stockInRoutes);
+app.use('/stock-out', stockOutRoutes);
 
 module.exports = app;

@@ -1,0 +1,71 @@
+<div class="stock-out-detail">
+  <header class="page-header">
+    <div>
+      <a class="back-link" [routerLink]="['/app/stock-out']">Retour aux sorties</a>
+      <h1>Detail sortie</h1>
+      <p *ngIf="bon">Bon {{ bon.reference }}</p>
+    </div>
+    <button
+      class="danger-action"
+      type="button"
+      (click)="cancelEntry()"
+      [disabled]="!bon || bon.statut === 'Annule' || canceling()"
+    >
+      {{ canceling() ? 'Annulation...' : 'Annuler la sortie' }}
+    </button>
+  </header>
+
+  <div *ngIf="loading()" class="empty-state">Chargement du detail...</div>
+  <div *ngIf="error()" class="message error">{{ error() }}</div>
+  <div *ngIf="success()" class="message success">{{ success() }}</div>
+
+  <section *ngIf="bon && !loading()" class="summary">
+    <div class="summary-card">
+      <span>Date et heure</span>
+      <strong>{{ formatDate(bon.date_bon) }}</strong>
+    </div>
+    <div class="summary-card">
+      <span>Utilisateur</span>
+      <strong>{{ bon.nom_complet || 'Non renseigne' }}</strong>
+    </div>
+    <div class="summary-card">
+      <span>Statut</span>
+      <strong [class]="getStatusClass(bon.statut)">{{ bon.statut }}</strong>
+    </div>
+    <div class="summary-card">
+      <span>Montant total</span>
+      <strong>{{ formatMoney(bon.total) }}</strong>
+    </div>
+  </section>
+
+  <section *ngIf="bon && !loading()" class="panel">
+    <h2>Lignes de produits</h2>
+
+    <div *ngIf="lines.length === 0" class="empty-state">
+      Aucun produit associe a ce bon.
+    </div>
+
+    <div *ngIf="lines.length > 0" class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Reference</th>
+            <th>Produit</th>
+            <th>Quantite</th>
+            <th>Prix unitaire</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let line of lines">
+            <td>{{ line.reference }}</td>
+            <td>{{ line.nom_produit }}</td>
+            <td>{{ line.quantite }}</td>
+            <td>{{ formatMoney(line.prix_unitaire) }}</td>
+            <td>{{ formatMoney(line.total_ligne) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
