@@ -1,0 +1,150 @@
+﻿<div class="stock-in-page">
+  <header class="page-header">
+    <div>
+      <h1>Entrees de stock</h1>
+      <p>Formulaires de reception de marchandises</p>
+    </div>
+    <button class="primary-action" type="button" (click)="openModal()">
+      <span class="icon">+</span>
+      Nouvelle entree
+    </button>
+  </header>
+
+  <section class="panel">
+    <div class="panel-toolbar">
+      <div class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M10.5 3.5a7 7 0 1 1 0 14 7 7 0 0 1 0-14Zm0 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm8.78 10.72 3.47 3.47a1 1 0 0 1-1.42 1.42l-3.47-3.47a9 9 0 1 1 1.42-1.42Z"
+          />
+        </svg>
+        <input
+          type="text"
+          placeholder="Rechercher..."
+          [value]="searchTerm"
+          (input)="onSearch($event)"
+        />
+      </div>
+      <span class="pill">{{ filteredEntries.length }} entrees</span>
+    </div>
+
+    <div *ngIf="loading()" class="empty-state">
+      Chargement des entrees de stock...
+    </div>
+
+    <div *ngIf="!loading() && filteredEntries.length === 0" class="empty-state">
+      Aucun bon de reception enregistre.
+    </div>
+
+    <div *ngIf="error()" class="message error">
+      {{ error() }}
+    </div>
+
+    <div *ngIf="!loading() && filteredEntries.length > 0" class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>N</th>
+            <th>Date</th>
+            <th>Utilisateur</th>
+            <th>Produits</th>
+            <th>Montant</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of filteredEntries">
+            <td>{{ entry.reference }}</td>
+            <td>{{ formatDate(entry.date_bon) }}</td>
+            <td>{{ entry.nom_complet || 'Non renseigne' }}</td>
+            <td>{{ entry.lignes }}</td>
+            <td>{{ formatMoney(entry.total) }}</td>
+            <td>
+              <span [class]="getStatusClass(entry.statut)">
+                {{ entry.statut === 'Valide' ? 'Valide' : 'Annule' }}
+              </span>
+            </td>
+            <td>
+              <a class="icon-button" [routerLink]="['/app/stock-in', entry.id_bon]" aria-label="Voir le detail">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M12 5.25c5.25 0 9.68 3.1 11 7.5-1.32 4.4-5.75 7.5-11 7.5S2.32 17.15 1 12.75c1.32-4.4 5.75-7.5 11-7.5zm0 2c-3.86 0-7.16 2.16-8.41 5.5 1.25 3.34 4.55 5.5 8.41 5.5s7.16-2.16 8.41-5.5c-1.25-3.34-5.55-5.5-8.41-5.5zm0 1.75a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7zm0 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"
+                  />
+                </svg>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="modal" *ngIf="modalOpen">
+    <div class="modal-overlay" (click)="closeModal()"></div>
+    <div class="modal-card">
+      <header class="modal-header">
+        <div>
+          <h2>Nouvelle entree</h2>
+          <p>Enregistrer un bon de reception</p>
+        </div>
+        <button class="icon-button" type="button" (click)="closeModal()" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M6.22 6.22a1 1 0 0 1 1.42 0L12 10.59l4.36-4.37a1 1 0 0 1 1.42 1.42L13.41 12l4.37 4.36a1 1 0 0 1-1.42 1.42L12 13.41l-4.36 4.37a1 1 0 0 1-1.42-1.42L10.59 12 6.22 7.64a1 1 0 0 1 0-1.42z"
+            />
+          </svg>
+        </button>
+      </header>
+
+      <div class="modal-body">
+        <div class="lines">
+          <div class="lines-header">
+            <h3>Produits</h3>
+            <button class="ghost" type="button" (click)="addLine()">+ Ajouter une ligne</button>
+          </div>
+
+          <div class="lines-table">
+            <div class="lines-row lines-head">
+              <span>Produit</span>
+              <span>Quantite</span>
+              <span>Prix unitaire</span>
+              <span>Total</span>
+              <span></span>
+            </div>
+            <div class="lines-row" *ngFor="let line of lines; let i = index">
+              <select [(ngModel)]="line.id_produit">
+                <option [ngValue]="null">Choisir un produit</option>
+                <option *ngFor="let product of products" [ngValue]="product.id_produit">
+                  {{ product.nom_produit }}
+                </option>
+              </select>
+              <input type="number" min="1" [(ngModel)]="line.quantite" />
+              <div class="readonly-field">{{ formatMoney(getUnitPrice(line.id_produit)) }}</div>
+              <div class="readonly-field">{{ formatMoney(getLineTotal(line)) }}</div>
+              <button class="ghost danger" type="button" (click)="removeLine(i)" [disabled]="lines.length === 1">
+                Retirer
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary">
+          <span>Total</span>
+          <strong>{{ formatMoney(getTotal()) }}</strong>
+        </div>
+
+        <div *ngIf="formError()" class="message error">
+          {{ formError() }}
+        </div>
+      </div>
+
+      <footer class="modal-footer">
+        <button class="ghost" type="button" (click)="closeModal()">Annuler</button>
+        <button class="primary-action" type="button" (click)="submitEntry()" [disabled]="saving()">
+          {{ saving() ? 'Enregistrement...' : 'Enregistrer' }}
+        </button>
+      </footer>
+    </div>
+  </div>
+</div>
