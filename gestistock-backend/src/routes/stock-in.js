@@ -306,6 +306,21 @@ router.post('/:id/cancel', async (req, res) => {
       [bon.id_bon]
     );
 
+    for (const line of lines) {
+      const [[product]] = await connection.query(
+        'SELECT quantite_stock FROM produit WHERE id_produit = ? LIMIT 1',
+        [line.id_produit]
+      );
+
+      if (!product || Number(product.quantite_stock) < Number(line.quantite)) {
+        await connection.rollback();
+        return res.status(409).json({
+          ok: false,
+          message: 'Annulation impossible: stock insuffisant.'
+        });
+      }
+    }
+
     await connection.query('UPDATE bon SET statut = ? WHERE id_bon = ?', ['Annule', bon.id_bon]);
 
     for (const line of lines) {
