@@ -35,6 +35,7 @@ Assurez-vous d'avoir installé :
 
 - **MySQL** (via WAMP, XAMPP ou installation directe)
 - **Node.js** (version LTS recommandée) — [https://nodejs.org](https://nodejs.org)
+- **Ollama** (pour le module IA)
 
 ---
 
@@ -64,7 +65,29 @@ node server.js
 
 ---
 
-### 4. Lancement du Frontend (Angular)
+### 4. Installation et démarrage d'Ollama (IA)
+
+1. Installez Ollama :
+```bash
+irm https://ollama.com/install.ps1 | iex
+```
+2. Lancez le service Ollama :
+
+```bash
+ollama serve
+```
+
+3. Téléchargez le modèle utilisé par l'application :
+
+```bash
+ollama pull llama3.2:1b
+```
+
+✅ Ollama écoute par défaut sur : `http://localhost:11434`
+
+---
+
+### 5. Lancement du Frontend (Angular)
 
 1. Ouvrez un terminal dans le dossier `gestistock-frontend`.
 2. Installez les dépendances *(uniquement lors du premier lancement)* :

@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
+import { AssistantWidgetComponent } from '../../shared/assistant-widget/assistant-widget.component';
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, SidebarComponent],
+  imports: [CommonModule, RouterOutlet, SidebarComponent, AssistantWidgetComponent],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.css'
 })
