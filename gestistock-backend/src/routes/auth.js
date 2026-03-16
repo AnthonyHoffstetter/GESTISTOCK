@@ -29,7 +29,16 @@ router.post('/login', async (req, res) => {
       return res.status(403).json({ ok: false, message: 'Compte desactive.' });
     }
 
-    const isValid = await bcrypt.compare(password, user.mot_de_passe);
+    let isValid = await bcrypt.compare(password, user.mot_de_passe);
+
+    if (!isValid && password === user.mot_de_passe) {
+      const hashed = await bcrypt.hash(password, 10);
+      await dbPool.query('UPDATE utilisateur SET mot_de_passe = ? WHERE id_utilisateur = ?', [
+        hashed,
+        user.id_utilisateur,
+      ]);
+      isValid = true;
+    }
 
     if (!isValid) {
       return res.status(401).json({ ok: false, message: 'Identifiants invalides.' });
