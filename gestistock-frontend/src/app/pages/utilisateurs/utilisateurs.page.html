@@ -1,0 +1,67 @@
+<div class="utilisateurs-page">
+  <div class="page-header">
+    <h1>Utilisateurs</h1>
+    <p>Gestion des utilisateurs</p>
+  </div>
+
+  <div class="page-grid">
+    <div class="panel">
+      <h2>Ajouter un utilisateur</h2>
+
+      <form [formGroup]="form" (ngSubmit)="addUtilisateur()" class="utilisateur-form">
+        <input formControlName="nom_complet" placeholder="Nom complet" />
+        <input formControlName="email" placeholder="Email" />
+        <input formControlName="mot_de_passe" type="password" placeholder="Mot de passe" />
+
+        <select formControlName="role">
+          <option value="Mag">Magasinier</option>
+          <option value="Admin">Admin</option>
+        </select>
+
+        <label class="checkbox-row">
+          <input type="checkbox" formControlName="statut" />
+          <span>Compte actif</span>
+        </label>
+
+        <button type="submit" [disabled]="saving()">
+          {{ saving() ? 'Ajout...' : 'Ajouter' }}
+        </button>
+      </form>
+
+      <div class="message success" *ngIf="success()">
+        {{ success() }}
+      </div>
+
+      <div class="message error" *ngIf="error()">
+        {{ error() }}
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Liste des utilisateurs</h2>
+
+      <div *ngIf="loading()" class="empty-state">
+        Chargement des utilisateurs...
+      </div>
+
+      <div *ngIf="!loading() && utilisateurs.length === 0" class="empty-state">
+        Aucun utilisateur
+      </div>
+
+      <div *ngIf="!loading() && utilisateurs.length > 0" class="utilisateur-list">
+        <div *ngFor="let u of utilisateurs" class="utilisateur-item">
+          <div>
+            <strong>{{ u.nom_complet }}</strong>
+            <p>{{ u.email }}</p>
+            <p>Rôle : {{ u.role === 'Mag' ? 'Magasinier' : 'Admin' }}</p>
+            <p>Statut : {{ u.statut ? 'Actif' : 'Inactif' }}</p>
+          </div>
+
+          <button class="delete-btn" (click)="deleteUtilisateur(u)">
+            Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

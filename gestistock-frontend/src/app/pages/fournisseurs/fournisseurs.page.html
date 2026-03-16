@@ -1,0 +1,59 @@
+<div class="fournisseurs-page">
+  <div class="page-header">
+    <h1>Fournisseurs</h1>
+    <p>Gestion des fournisseurs</p>
+  </div>
+
+  <div class="page-grid">
+    <div class="panel">
+      <h2>Ajouter un fournisseur</h2>
+
+      <form [formGroup]="form" (ngSubmit)="addFournisseur()" class="fournisseur-form">
+        <input formControlName="nom_complet" placeholder="Nom fournisseur" />
+        <input formControlName="email" placeholder="Email" />
+        <input formControlName="telephone" placeholder="Téléphone" />
+        <input formControlName="adresse" placeholder="Adresse" />
+        <textarea formControlName="notes" placeholder="Notes"></textarea>
+
+        <button type="submit" [disabled]="saving()">
+          {{ saving() ? 'Ajout...' : 'Ajouter' }}
+        </button>
+      </form>
+
+      <div class="message success" *ngIf="success()">
+        {{ success() }}
+      </div>
+
+      <div class="message error" *ngIf="error()">
+        {{ error() }}
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Liste des fournisseurs</h2>
+
+      <div *ngIf="loading()" class="empty-state">
+        Chargement des fournisseurs...
+      </div>
+
+      <div *ngIf="!loading() && fournisseurs.length === 0" class="empty-state">
+        Aucun fournisseur
+      </div>
+
+      <div *ngIf="!loading() && fournisseurs.length > 0" class="fournisseur-list">
+        <div *ngFor="let f of fournisseurs" class="fournisseur-item">
+          <div>
+            <strong>{{ f.nom_complet }}</strong>
+            <p>{{ f.email }}</p>
+            <p>{{ f.telephone }}</p>
+            <p>{{ f.adresse }}</p>
+          </div>
+
+          <button class="delete-btn" (click)="deleteFournisseur(f)">
+            Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

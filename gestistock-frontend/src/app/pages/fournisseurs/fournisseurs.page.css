@@ -1,0 +1,166 @@
+.fournisseurs-page {
+  min-height: 100vh;
+  padding: 28px;
+  background: #f3f5f7;
+  color: #111827;
+  font-family: "DM Sans", sans-serif;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.page-header p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.page-grid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 20px;
+}
+
+.panel {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 20px;
+}
+
+.panel h2 {
+  margin: 0 0 18px 0;
+  font-size: 1.2rem;
+}
+
+.fournisseur-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fournisseur-form input,
+.fournisseur-form textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid #dbe2e8;
+  background: #ffffff;
+  color: #111827;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.fournisseur-form input::placeholder,
+.fournisseur-form textarea::placeholder {
+  color: #9ca3af;
+}
+
+.fournisseur-form textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.fournisseur-form button {
+  margin-top: 4px;
+  padding: 13px 16px;
+  border: none;
+  border-radius: 12px;
+  background: #2f80ed;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.fournisseur-form button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.message {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+}
+
+.message.success {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+}
+
+.message.error {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+}
+
+.empty-state {
+  color: #6b7280;
+}
+
+.fournisseur-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fournisseur-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+}
+
+.fournisseur-item strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+
+.fournisseur-item p {
+  margin: 2px 0;
+  color: #6b7280;
+  font-size: 0.92rem;
+}
+
+.delete-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .page-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .fournisseurs-page {
+    padding: 18px;
+  }
+
+  .page-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .fournisseur-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

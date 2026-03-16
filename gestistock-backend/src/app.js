@@ -8,6 +8,8 @@ const categoriesRoutes = require('./routes/categories');
 const productsRoutes = require('./routes/products');
 const stockInRoutes = require('./routes/stock-in');
 const stockOutRoutes = require('./routes/stock-out');
+const fournisseursRoutes = require('./routes/fournisseurs');
+const usersManagementRoutes = require('./routes/users-management');
 
 const app = express();
 
@@ -25,5 +27,7 @@ app.use('/categories', categoriesRoutes);
 app.use('/products', productsRoutes);
 app.use('/stock-in', stockInRoutes);
 app.use('/stock-out', stockOutRoutes);
+app.use('/fournisseurs', fournisseursRoutes);
+app.use('/utilisateurs', usersManagementRoutes);
 
 module.exports = app;

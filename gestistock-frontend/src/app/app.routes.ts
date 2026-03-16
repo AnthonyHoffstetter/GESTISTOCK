@@ -8,6 +8,8 @@ import { StockInDetailPage } from './pages/stock-in-detail/stock-in-detail.page'
 import { StockOutPage } from './pages/stock-out/stock-out.page';
 import { StockOutDetailPage } from './pages/stock-out-detail/stock-out-detail.page';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { FournisseursPage } from './pages/fournisseurs/fournisseurs.page';
+import { UtilisateursPage } from './pages/utilisateurs/utilisateurs.page';
 
 export const routes: Routes = [
   { path: '', component: LoginPage },
@@ -19,10 +21,15 @@ export const routes: Routes = [
       { path: 'dashboard', component: DashboardPage },
       { path: 'categories', component: CategoriesPage },
       { path: 'products', component: ProductsPage },
+<<<<<<< HEAD
       { path: 'stock-in', component: StockInPage },
       { path: 'stock-in/:id', component: StockInDetailPage },
       { path: 'stock-out', component: StockOutPage },
       { path: 'stock-out/:id', component: StockOutDetailPage },
+=======
+      { path: 'fournisseurs', component: FournisseursPage },
+      { path: 'users', component: UtilisateursPage },
+>>>>>>> b8dae38 (Ajout fournisseurs +  liste utilisateurs)
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
