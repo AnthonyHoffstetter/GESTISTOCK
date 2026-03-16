@@ -1,0 +1,63 @@
+<div class="assistant-wrap">
+  <button class="assistant-toggle" (click)="toggle()" aria-label="Assistant GESTISTOCK">
+    <span class="assistant-badge">AI</span>
+  </button>
+
+  <section class="assistant-panel" *ngIf="isOpen" aria-live="polite">
+    <header class="assistant-header">
+      <div class="assistant-header-left">
+        <div class="assistant-title">Assistant GESTISTOCK</div>
+        <div class="assistant-status">
+          <span class="assistant-status-dot"></span>
+          <span>En ligne</span>
+        </div>
+      </div>
+      <div class="assistant-header-actions">
+        <button class="assistant-settings" type="button" aria-label="Paramètres IA">IA</button>
+        <button class="assistant-close" type="button" (click)="toggle()" aria-label="Fermer">
+          ✕
+        </button>
+      </div>
+    </header>
+
+    <div class="assistant-messages" #messagesContainer>
+      <div
+        class="assistant-message"
+        *ngFor="let msg of messages; trackBy: trackByIndex"
+        [class.is-user]="msg.role === 'user'"
+      >
+        <div class="assistant-content">{{ msg.content }}</div>
+      </div>
+
+      <div class="assistant-message is-assistant" *ngIf="isLoading">
+        <div class="assistant-content">...</div>
+      </div>
+    </div>
+
+    <div class="assistant-quick">
+      <button
+        class="assistant-quick-btn"
+        type="button"
+        *ngFor="let suggestion of quickSuggestions"
+        (click)="sendSuggestion(suggestion)"
+        [disabled]="isLoading"
+      >
+        {{ suggestion }}
+      </button>
+    </div>
+
+    <form class="assistant-input" (ngSubmit)="send()">
+      <input
+        type="text"
+        placeholder="Posez votre question..."
+        [(ngModel)]="input"
+        name="assistantInput"
+        [disabled]="isLoading"
+        autocomplete="off"
+      />
+      <button type="submit" class="assistant-send" [disabled]="isLoading || !input.trim()" aria-label="Envoyer">
+        <span class="assistant-send-icon">➤</span>
+      </button>
+    </form>
+  </section>
+</div>
