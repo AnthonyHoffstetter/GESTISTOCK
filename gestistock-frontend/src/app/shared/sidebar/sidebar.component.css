@@ -8,6 +8,7 @@
   padding: 18px 14px;
   position: sticky;
   top: 0;
+  font-family: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
 .brand {
@@ -72,9 +73,11 @@
 }
 
 .icon {
-  width: 18px;
+  width: 22px;
   text-align: center;
   opacity: 0.95;
+  font-size: 20px;
+  line-height: 1;
 }
 
 .label {
