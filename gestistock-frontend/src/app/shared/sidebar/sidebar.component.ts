@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,14 +11,24 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
-menuItems = [
-  { label: 'Tableau de bord', path: '/app/dashboard', icon: 'dashboard' },
-  { label: 'Produits', path: '/app/products', icon: 'inventory_2' },
-  { label: 'Categories', path: '/app/categories', icon: 'category' },
-  { label: 'Fournisseurs', path: '/app/fournisseurs', icon: 'local_shipping' },
-  { label: 'Entrees de stock', path: '/app/stock-in', icon: 'move_to_inbox' },
-  { label: 'Sorties de stock', path: '/app/stock-out', icon: 'outbox' },
-  { label: 'Historique', path: '/app/history', icon: 'history' },
-  { label: 'Utilisateurs', path: '/app/users', icon: 'group' }
-];
+  constructor(public authService: AuthService) {}
+
+  menuItems = [
+    { label: 'Tableau de bord', path: '/app/dashboard', icon: '▦' },
+    { label: 'Produits', path: '/app/products', icon: '◈' },
+    { label: 'Categories', path: '/app/categories', icon: '▤' },
+    { label: 'Fournisseurs', path: '/app/fournisseurs', icon: '◫' },
+    { label: 'Entrees de stock', path: '/app/stock-in', icon: '↓' },
+    { label: 'Sorties de stock', path: '/app/stock-out', icon: '↑' },
+    { label: 'Historique', path: '/app/history', icon: '↺' }
+  ];
+
+  adminItems = [
+    { label: 'Utilisateurs', path: '/app/users', icon: '👥' }
+  ];
+
+  logout(): void {
+    this.authService.logout();
+    window.location.href = '/';
+  }
 }

@@ -1,7 +1,7 @@
 <div class="utilisateurs-page">
   <div class="page-header">
     <h1>Utilisateurs</h1>
-    <p>Gestion des utilisateurs</p>
+    <p>Gestion des utilisateurs et des rôles</p>
   </div>
 
   <div class="page-grid">
@@ -50,11 +50,26 @@
 
       <div *ngIf="!loading() && utilisateurs.length > 0" class="utilisateur-list">
         <div *ngFor="let u of utilisateurs" class="utilisateur-item">
-          <div>
+          <div class="utilisateur-main">
             <strong>{{ u.nom_complet }}</strong>
             <p>{{ u.email }}</p>
-            <p>Rôle : {{ u.role === 'Mag' ? 'Magasinier' : 'Admin' }}</p>
-            <p>Statut : {{ u.statut ? 'Actif' : 'Inactif' }}</p>
+
+            <div class="inline-controls">
+              <label>Rôle :</label>
+              <select [value]="u.role" (change)="changeRole(u, $event)">
+                <option value="Mag">Magasinier</option>
+                <option value="Admin">Admin</option>
+              </select>
+            </div>
+
+            <label class="checkbox-row small">
+              <input
+                type="checkbox"
+                [checked]="u.statut"
+                (change)="toggleStatut(u, $event)"
+              />
+              <span>{{ u.statut ? 'Actif' : 'Inactif' }}</span>
+            </label>
           </div>
 
           <button class="delete-btn" (click)="deleteUtilisateur(u)">

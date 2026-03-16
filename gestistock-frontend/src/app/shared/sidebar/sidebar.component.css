@@ -137,4 +137,15 @@
   .menu-link {
     justify-content: center;
   }
+  .logout-btn {
+  margin-top: 14px;
+  width: 100%;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.14);
+  color: #fca5a5;
+  cursor: pointer;
+  font-weight: 600;
+}
 }

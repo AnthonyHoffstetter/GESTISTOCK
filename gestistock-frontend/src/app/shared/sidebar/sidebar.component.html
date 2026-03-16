@@ -14,16 +14,32 @@
       routerLinkActive="active"
       class="menu-link"
     >
-      <span class="icon material-symbols-rounded">{{ item.icon }}</span>
+      <span class="icon">{{ item.icon }}</span>
       <span class="label">{{ item.label }}</span>
     </a>
+
+    <ng-container *ngIf="authService.hasRole('Admin')">
+      <a
+        *ngFor="let item of adminItems"
+        [routerLink]="item.path"
+        routerLinkActive="active"
+        class="menu-link"
+      >
+        <span class="icon">{{ item.icon }}</span>
+        <span class="label">{{ item.label }}</span>
+      </a>
+    </ng-container>
   </nav>
 
-  <div class="user-box">
-    <div class="avatar">JB</div>
+  <div class="user-box" *ngIf="authService.getUser() as user">
+    <div class="avatar">
+      {{ user.nom_complet.charAt(0) }}
+    </div>
     <div class="user-info">
-      <strong>Julien B.</strong>
-      <span>Admin</span>
+      <strong>{{ user.nom_complet }}</strong>
+      <span>{{ user.role === 'Admin' ? 'Administrateur' : 'Magasinier' }}</span>
     </div>
   </div>
+
+  <button class="logout-btn" (click)="logout()">Déconnexion</button>
 </aside>

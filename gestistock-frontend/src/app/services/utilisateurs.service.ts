@@ -34,4 +34,12 @@ export class UtilisateursService {
   deleteUtilisateur(id: number): Observable<any> {
     return this.http.delete(`${environment.apiUrl}/utilisateurs/${id}`);
   }
+
+  updateRole(id: number, role: 'Admin' | 'Mag'): Observable<any> {
+    return this.http.put(`${environment.apiUrl}/utilisateurs/${id}/role`, { role });
+  }
+
+  updateStatut(id: number, statut: boolean): Observable<any> {
+    return this.http.put(`${environment.apiUrl}/utilisateurs/${id}/statut`, { statut });
+  }
 }

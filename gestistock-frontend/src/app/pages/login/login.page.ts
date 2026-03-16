@@ -25,7 +25,11 @@ export class LoginPage {
 
   showPassword = false;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private router: Router
+  ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
@@ -52,30 +56,47 @@ export class LoginPage {
     this.loading.set(true);
 
     try {
-      const payload = this.form.getRawValue();
-      const response = await firstValueFrom(
-        this.http.post<{ ok: boolean; token?: string; user?: unknown; message?: string }>(
-          `${environment.apiUrl}/auth/login`,
-          payload
-        )
-      );
+  const payload = {
+    email: this.form.value.email,
+    password: this.form.value.password
+  };
 
-      if (!response.ok) {
-        this.error.set(response.message || 'Identifiants incorrects.');
-        return;
-      }
+  const response = await firstValueFrom(
+    this.http.post<{
+      ok: boolean;
+      token?: string;
+      user?: {
+        id_utilisateur: number;
+        nom_complet: string;
+        email: string;
+        role: 'Admin' | 'Mag';
+        statut: boolean;
+      };
+      message?: string;
+    }>(`${environment.apiUrl}/auth/login`, payload)
+  );
 
-      if (!response.token) {
-        this.error.set('Connexion refusee: token manquant.');
-        return;
-      }
+  if (!response.ok) {
+    this.error.set(response.message || 'Identifiants incorrects.');
+    return;
+  }
 
-      localStorage.setItem('gestistock_token', response.token);
+  if (!response.token) {
+    this.error.set('Connexion refusee: token manquant.');
+    return;
+  }
 
-      await this.router.navigateByUrl('/app/dashboard');
-    } catch (err) {
+  localStorage.setItem('gestistock_token', response.token);
+
+  if (response.user) {
+    localStorage.setItem('gestistock_user', JSON.stringify(response.user));
+  }
+
+  await this.router.navigateByUrl('/app/dashboard');
+} catch (err) {
       if (err instanceof HttpErrorResponse) {
         const apiMessage = err.error?.message;
+
         if (err.status === 0) {
           this.error.set('Impossible de joindre le serveur.');
         } else {

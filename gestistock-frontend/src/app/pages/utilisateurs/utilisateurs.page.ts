@@ -74,7 +74,7 @@ export class UtilisateursPage implements OnInit {
     };
 
     this.utilisateursService.createUtilisateur(payload).subscribe({
-      next: (_res: unknown) => {
+      next: () => {
         this.success.set('Utilisateur ajouté');
         this.form.reset({
           nom_complet: '',
@@ -97,18 +97,45 @@ export class UtilisateursPage implements OnInit {
     this.error.set('');
     this.success.set('');
 
-    const confirmed = window.confirm(`Supprimer ${u.nom_complet} ?`);
-    if (!confirmed) {
+    if (!window.confirm(`Supprimer ${u.nom_complet} ?`)) {
       return;
     }
 
     this.utilisateursService.deleteUtilisateur(u.id_utilisateur).subscribe({
-      next: (_res: unknown) => {
+      next: () => {
         this.success.set('Utilisateur supprimé');
         this.loadUtilisateurs();
       },
       error: (err: HttpErrorResponse) => {
         this.error.set(err.error?.message || 'Impossible de supprimer l’utilisateur.');
+      }
+    });
+  }
+
+  changeRole(u: Utilisateur, event: Event): void {
+    const role = (event.target as HTMLSelectElement).value as 'Admin' | 'Mag';
+
+    this.utilisateursService.updateRole(u.id_utilisateur, role).subscribe({
+      next: () => {
+        this.success.set('Rôle mis à jour');
+        this.loadUtilisateurs();
+      },
+      error: (err: HttpErrorResponse) => {
+        this.error.set(err.error?.message || 'Impossible de modifier le rôle.');
+      }
+    });
+  }
+
+  toggleStatut(u: Utilisateur, event: Event): void {
+    const statut = (event.target as HTMLInputElement).checked;
+
+    this.utilisateursService.updateStatut(u.id_utilisateur, statut).subscribe({
+      next: () => {
+        this.success.set('Statut mis à jour');
+        this.loadUtilisateurs();
+      },
+      error: (err: HttpErrorResponse) => {
+        this.error.set(err.error?.message || 'Impossible de modifier le statut.');
       }
     });
   }

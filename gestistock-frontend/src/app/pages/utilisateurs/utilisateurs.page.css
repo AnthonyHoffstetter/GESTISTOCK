@@ -46,7 +46,8 @@
 }
 
 .utilisateur-form input,
-.utilisateur-form select {
+.utilisateur-form select,
+.inline-controls select {
   width: 100%;
   padding: 14px 16px;
   border-radius: 12px;
@@ -55,10 +56,6 @@
   color: #111827;
   outline: none;
   font-size: 0.95rem;
-}
-
-.utilisateur-form input::placeholder {
-  color: #9ca3af;
 }
 
 .utilisateur-form button {
@@ -83,6 +80,27 @@
   gap: 10px;
   color: #374151;
   font-size: 0.95rem;
+}
+
+.checkbox-row.small {
+  margin-top: 10px;
+}
+
+.inline-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.inline-controls label {
+  min-width: 48px;
+  color: #374151;
+}
+
+.inline-controls select {
+  max-width: 180px;
+  padding: 10px 12px;
 }
 
 .message {
@@ -123,13 +141,13 @@
   border: 1px solid #e5e7eb;
 }
 
-.utilisateur-item strong {
+.utilisateur-main strong {
   display: block;
   margin-bottom: 6px;
   font-size: 1rem;
 }
 
-.utilisateur-item p {
+.utilisateur-main p {
   margin: 2px 0;
   color: #6b7280;
   font-size: 0.92rem;
@@ -162,6 +180,11 @@
   }
 
   .utilisateur-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .inline-controls {
     flex-direction: column;
     align-items: flex-start;
   }
