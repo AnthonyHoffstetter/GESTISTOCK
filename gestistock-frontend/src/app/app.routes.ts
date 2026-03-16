@@ -10,6 +10,7 @@ import { FournisseursPage } from './pages/fournisseurs/fournisseurs.page';
 import { UtilisateursPage } from './pages/utilisateurs/utilisateurs.page';
 import { StockOutPage } from './pages/stock-out/stock-out.page';
 import { StockOutDetailPage } from './pages/stock-out-detail/stock-out-detail.page';
+import { HistoriquePage } from './pages/historique/historique.page';
 
 export const routes: Routes = [
   { path: '', component: LoginPage },
@@ -27,6 +28,7 @@ export const routes: Routes = [
       { path: 'stock-out/:id', component: StockOutDetailPage },
       { path: 'fournisseurs', component: FournisseursPage },
       { path: 'users', component: UtilisateursPage },
+      { path: 'history', component: HistoriquePage },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
