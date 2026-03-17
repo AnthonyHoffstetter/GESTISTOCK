@@ -11,21 +11,37 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
-  constructor(public authService: AuthService) {}
+  isEcoMode = false;
+
+  constructor(public authService: AuthService) {
+    this.isEcoMode = localStorage.getItem('eco_mode') === 'true';
+  }
 
   menuItems = [
-    { label: 'Tableau de bord', path: '/app/dashboard', icon: 'space_dashboard' },
-    { label: 'Produits', path: '/app/products', icon: 'inventory_2' },
-    { label: 'Categories', path: '/app/categories', icon: 'category' },
-    { label: 'Fournisseurs', path: '/app/fournisseurs', icon: 'local_shipping' },
-    { label: 'Entrees de stock', path: '/app/stock-in', icon: 'move_to_inbox' },
-    { label: 'Sorties de stock', path: '/app/stock-out', icon: 'outbox' },
-    { label: 'Historique', path: '/app/history', icon: 'history' }
+    { label: 'Tableau de bord', path: '/app/dashboard', icon: '▦' },
+    { label: 'Produits', path: '/app/products', icon: '◈' },
+    { label: 'Categories', path: '/app/categories', icon: '▤' },
+    { label: 'Fournisseurs', path: '/app/fournisseurs', icon: '◫' },
+    { label: 'Entrees de stock', path: '/app/stock-in', icon: '↓' },
+    { label: 'Sorties de stock', path: '/app/stock-out', icon: '↑' },
+    { label: 'Historique', path: '/app/history', icon: '↺' }
   ];
 
   adminItems = [
-    { label: 'Utilisateurs', path: '/app/users', icon: 'group' }
+    { label: 'Utilisateurs', path: '/app/users', icon: '👥' }
   ];
+
+  toggleEcoMode(): void {
+    this.isEcoMode = !this.isEcoMode;
+
+    if (this.isEcoMode) {
+      document.body.classList.add('eco-mode');
+      localStorage.setItem('eco_mode', 'true');
+    } else {
+      document.body.classList.remove('eco-mode');
+      localStorage.setItem('eco_mode', 'false');
+    }
+  }
 
   logout(): void {
     this.authService.logout();

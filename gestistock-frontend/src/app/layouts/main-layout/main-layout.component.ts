@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
@@ -11,5 +11,14 @@ import { AssistantWidgetComponent } from '../../shared/assistant-widget/assistan
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.css'
 })
-export class MainLayoutComponent {
+export class MainLayoutComponent implements OnInit {
+  ngOnInit(): void {
+    const ecoMode = localStorage.getItem('eco_mode');
+
+    if (ecoMode === 'true') {
+      document.body.classList.add('eco-mode');
+    } else {
+      document.body.classList.remove('eco-mode');
+    }
+  }
 }
