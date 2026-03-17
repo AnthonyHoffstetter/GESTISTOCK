@@ -90,3 +90,6 @@ CREATE INDEX idx_mouvement_utilisateur ON mouvement_stock(id_utilisateur);
 
 INSERT INTO utilisateur (nom_complet, email, mot_de_passe, role, statut)
 VALUES ('Admin Demo', 'admin@demo.local', '$2a$10$mOimQuH2Vb8DVjz46Vr9bee/HxtE2yJTEsAyeb0Cudpij3io0ZrJm', 'Admin', TRUE);
+
+INSERT INTO utilisateur (nom_complet, email, mot_de_passe, role, statut)
+VALUES ('Magasinier Demo', 'magasinier@demo.local', '$2a$10$1dcBDF/SPj30rAoTzXK5Y.ekHrjBGt2BbuQWdkIEhMAnnkjWWjTZ.', 'Mag', TRUE);
