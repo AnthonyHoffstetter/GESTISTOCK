@@ -13,6 +13,7 @@ import { AssistantService, ChatMessage } from '../../services/assistant.service'
 export class AssistantWidgetComponent implements AfterViewChecked, OnInit {
   isOpen = false;
   isLoading = false;
+  isOnline = false;
   input = '';
   messages: ChatMessage[] = [
     {
@@ -30,6 +31,8 @@ export class AssistantWidgetComponent implements AfterViewChecked, OnInit {
   @ViewChild('messagesContainer') private messagesContainer?: ElementRef<HTMLDivElement>;
 
   ngOnInit(): void {
+    this.checkHealth();
+
     this.assistantService.getSuggestions().subscribe({
       next: (res) => {
         if (res?.ok && Array.isArray(res.suggestions)) {
@@ -45,6 +48,7 @@ export class AssistantWidgetComponent implements AfterViewChecked, OnInit {
   toggle(): void {
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
+      this.checkHealth();
       this.scrollToBottom();
     }
   }
@@ -70,11 +74,13 @@ export class AssistantWidgetComponent implements AfterViewChecked, OnInit {
         }
         this.isLoading = false;
         this.cdr.detectChanges();
+        this.checkHealth();
       },
       error: () => {
         this.messages.push({ role: 'assistant', content: "Le service local n'est pas disponible." });
         this.isLoading = false;
         this.cdr.detectChanges();
+        this.checkHealth();
       }
     });
   }
@@ -87,6 +93,17 @@ export class AssistantWidgetComponent implements AfterViewChecked, OnInit {
 
   ngAfterViewChecked(): void {
     this.scrollToBottom();
+  }
+
+  private checkHealth(): void {
+    this.assistantService.getHealth().subscribe({
+      next: (res) => {
+        this.isOnline = !!res?.ok;
+      },
+      error: () => {
+        this.isOnline = false;
+      }
+    });
   }
 
   private scrollToBottom(): void {

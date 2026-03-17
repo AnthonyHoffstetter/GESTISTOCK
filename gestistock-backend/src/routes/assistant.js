@@ -8,14 +8,24 @@ const OLLAMA_URL = (process.env.OLLAMA_URL || 'http://localhost:11434').replace(
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2:1b';
 const OLLAMA_SYSTEM =
   process.env.OLLAMA_SYSTEM ||
-  "Tu es l'assistant GESTISTOCK. Aide l'utilisateur a analyser le stock et reponds clairement en francais.";
+  "Tu es l'assistant GESTISTOCK. Tu aides a la gestion des stocks et tu reponds clairement en francais. " +
+  "Tu es coherent, factuel, et tu expliques quand des informations manquent.";
 const POLICY_SYSTEM =
-  "Regles strictes: repond uniquement aux questions liees a la gestion des stocks dans GESTISTOCK. " +
-  "Ne fournis pas d'informations hors perimetre, ne mentionne pas des donnees qui ne sont pas dans le contexte fourni, " +
-  "ne divulgue pas de noms d'utilisateurs ou d'informations personnelles. " +
-  "N'utilise jamais le mot JSON ou donnees techniques. " +
-  "Si une demande est hors perimetre ou manque de donnees, dis-le clairement et demande une precision. " +
-  "Toutes les requetes doivent etre traitees par l'IA a partir du contexte fourni.";
+  "Regles strictes de comportement: " +
+  "1) Perimetre: tu peux repondre aux questions de gestion (stock, achats, ventes, logistique) " +
+  "et donner des conseils generaux utiles. Si la demande est hors sujet, dis-le clairement. " +
+  "2) Donnees: pour les questions sur GESTISTOCK, base-toi uniquement sur le contexte fourni. " +
+  "N'invente jamais de chiffres, noms, ou faits internes. Si une info manque, demande une precision. " +
+  "Pour les conseils generaux, indique que c'est une recommandation. " +
+  "3) Confidentialite: ne divulgue pas de donnees personnelles ou sensibles. " +
+  "4) Style: reponses courtes, structurees, orientee action. Utilise des phrases simples et professionnelles. " +
+  "5) Contexte de conversation: traite chaque nouvelle question de facon independante. " +
+  "N'injecte pas un ancien sujet (ex: categories) si l'utilisateur change de theme. " +
+  "Ne mentionne pas d'informations non demandees. " +
+  "6) Actions dans l'app: si l'utilisateur veut 'agir comme une IA sur le site', explique les etapes dans GESTISTOCK " +
+  "(ex: ou cliquer, quel formulaire remplir) sans pretendre que tu navigues toi-meme. " +
+  "7) Format: ne parle pas de JSON, API, ou details techniques. Ne montre pas de code. " +
+  "8) Coherence: si tu as deja donne une reponse, reste coherent. Si tu corriges, explique la raison.";
 const DEFAULT_SUGGESTIONS = [
   'Produits en rupture de stock ?',
   'Valeur totale du stock ?',
@@ -79,6 +89,14 @@ router.post('/chat', authenticateToken, async (req, res) => {
         [PRODUCT_CONTEXT_LIMIT]
       );
 
+      const [categories] = await dbPool.query(
+        `
+        SELECT nom_categorie
+        FROM categorie
+        ORDER BY nom_categorie ASC
+        `
+      );
+
       const [[stockValue]] = await dbPool.query(
         'SELECT COALESCE(SUM(prix * quantite_stock), 0) AS valeurStock FROM produit'
       );
@@ -107,14 +125,22 @@ router.post('/chat', authenticateToken, async (req, res) => {
         recentMovements = rows;
       }
 
+      const produitsEnRupture = products.filter((p) => Number(p.quantite_stock) <= 0);
+      const produitsStockFaible = products.filter(
+        (p) => Number(p.quantite_stock) > 0 && Number(p.quantite_stock) <= Number(p.stock_minimum)
+      );
+
       stockContext = {
         totalProduits: Number(productsCount.totalProduits || 0),
         produits: products,
+        categories: categories,
         resume: {
           valeurStock: Number(stockValue.valeurStock || 0),
           totalRupture: Number(outOfStockCount.totalRupture || 0),
           totalStockFaible: Number(lowStockCount.totalStockFaible || 0)
         },
+        rupturesListees: produitsEnRupture,
+        stockFaibleListe: produitsStockFaible,
         mouvementsRecents: recentMovements
       };
     } catch (err) {
@@ -135,6 +161,11 @@ router.post('/chat', authenticateToken, async (req, res) => {
         content:
           "Contexte stock pour repondre de facon precise. " +
           "Important: pour les ruptures, utilise uniquement les stocks actuels des produits, pas les mouvements. " +
+          "Si la question est sur les ruptures, reponds avec la liste 'Produits en rupture'. " +
+          "Si la question est sur 'bientot en rupture', 'stock faible', ou 'a reapprovisionner', " +
+          "reponds avec la liste 'Produits stock faible'. " +
+          "Regle: un produit est considere 'bientot en rupture' si stock <= stock_minimum. " +
+          "Ne demande pas de precision. " +
           "Total produits=" +
           stockContext.totalProduits +
           ", valeur stock=" +
@@ -143,6 +174,22 @@ router.post('/chat', authenticateToken, async (req, res) => {
           stockContext.resume.totalRupture +
           ", stock faible=" +
           stockContext.resume.totalStockFaible +
+          ". Produits en rupture (liste limitee): " +
+          (stockContext.rupturesListees && stockContext.rupturesListees.length > 0
+            ? stockContext.rupturesListees
+                .map((p) => `${p.nom_produit} | stock=${p.quantite_stock}`)
+                .join(' ; ')
+            : 'aucun') +
+          ". Produits stock faible (liste limitee): " +
+          (stockContext.stockFaibleListe && stockContext.stockFaibleListe.length > 0
+            ? stockContext.stockFaibleListe
+                .map((p) => `${p.nom_produit} | stock=${p.quantite_stock} | min=${p.stock_minimum}`)
+                .join(' ; ')
+            : 'aucun') +
+          ". Categories actuelles: " +
+          (stockContext.categories && stockContext.categories.length > 0
+            ? stockContext.categories.map((c) => c.nom_categorie).join(' ; ')
+            : 'aucune') +
           ". Liste des produits (limitee): " +
           stockContext.produits
             .map(
@@ -194,6 +241,24 @@ router.post('/chat', authenticateToken, async (req, res) => {
 
 router.get('/suggestions', authenticateToken, (req, res) => {
   return res.json({ ok: true, suggestions: parseSuggestions() });
+});
+
+router.get('/health', authenticateToken, async (req, res) => {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 1500);
+    const response = await fetch(`${OLLAMA_URL}/api/tags`, {
+      method: 'GET',
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    if (!response.ok) {
+      return res.json({ ok: false });
+    }
+    return res.json({ ok: true });
+  } catch (err) {
+    return res.json({ ok: false });
+  }
 });
 
 module.exports = router;

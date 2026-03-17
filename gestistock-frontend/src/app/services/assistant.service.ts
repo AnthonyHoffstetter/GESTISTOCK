@@ -18,6 +18,10 @@ export interface SuggestionsResponse {
   suggestions: string[];
 }
 
+export interface HealthResponse {
+  ok: boolean;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -46,6 +50,18 @@ export class AssistantService {
 
     return this.http.get<SuggestionsResponse>(
       `${environment.apiUrl}/assistant/suggestions`,
+      { headers }
+    );
+  }
+
+  getHealth(): Observable<HealthResponse> {
+    const token = localStorage.getItem('gestistock_token') || '';
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.get<HealthResponse>(
+      `${environment.apiUrl}/assistant/health`,
       { headers }
     );
   }
