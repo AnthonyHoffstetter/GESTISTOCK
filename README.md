@@ -71,7 +71,7 @@ node server.js
 ```bash
 irm https://ollama.com/install.ps1 | iex
 ```
-2. Lancez le service Ollama :
+2. Lancez le service Ollama si pas lancé automatiquement :
 
 ```bash
 ollama serve
