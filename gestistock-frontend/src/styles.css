@@ -10,3 +10,14 @@ html, body {
 body {
   overflow-x: hidden;
 }
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+input,
+textarea,
+select,
+button {
+  max-width: 100%;
+}
