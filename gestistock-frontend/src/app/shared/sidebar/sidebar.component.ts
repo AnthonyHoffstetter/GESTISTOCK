@@ -14,17 +14,17 @@ export class SidebarComponent {
   constructor(public authService: AuthService) {}
 
   menuItems = [
-    { label: 'Tableau de bord', path: '/app/dashboard', icon: '▦' },
-    { label: 'Produits', path: '/app/products', icon: '◈' },
-    { label: 'Categories', path: '/app/categories', icon: '▤' },
-    { label: 'Fournisseurs', path: '/app/fournisseurs', icon: '◫' },
-    { label: 'Entrees de stock', path: '/app/stock-in', icon: '↓' },
-    { label: 'Sorties de stock', path: '/app/stock-out', icon: '↑' },
-    { label: 'Historique', path: '/app/history', icon: '↺' }
+    { label: 'Tableau de bord', path: '/app/dashboard', icon: 'space_dashboard' },
+    { label: 'Produits', path: '/app/products', icon: 'inventory_2' },
+    { label: 'Categories', path: '/app/categories', icon: 'category' },
+    { label: 'Fournisseurs', path: '/app/fournisseurs', icon: 'local_shipping' },
+    { label: 'Entrees de stock', path: '/app/stock-in', icon: 'move_to_inbox' },
+    { label: 'Sorties de stock', path: '/app/stock-out', icon: 'outbox' },
+    { label: 'Historique', path: '/app/history', icon: 'history' }
   ];
 
   adminItems = [
-    { label: 'Utilisateurs', path: '/app/users', icon: '👥' }
+    { label: 'Utilisateurs', path: '/app/users', icon: 'group' }
   ];
 
   logout(): void {
