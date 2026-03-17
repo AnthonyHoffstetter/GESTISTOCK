@@ -111,3 +111,7 @@ npm start
 Vous pouvez vous connecter avec :
 - Email : `admin@demo.local`
 - Mot de passe : `admin123`
+
+Compte magasinier :
+- Email : `magasinier@demo.local`
+- Mot de passe : `magasinier123`
