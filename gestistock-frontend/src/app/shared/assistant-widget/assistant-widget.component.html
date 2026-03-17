@@ -8,8 +8,8 @@
       <div class="assistant-header-left">
         <div class="assistant-title">Assistant GESTISTOCK</div>
         <div class="assistant-status">
-          <span class="assistant-status-dot"></span>
-          <span>En ligne</span>
+          <span class="assistant-status-dot" [class.is-offline]="!isOnline"></span>
+          <span>{{ isOnline ? 'En ligne' : 'Hors ligne' }}</span>
         </div>
       </div>
       <div class="assistant-header-actions">

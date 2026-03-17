@@ -83,6 +83,10 @@
   display: inline-block;
 }
 
+.assistant-status-dot.is-offline {
+  background: #f87171;
+}
+
 .assistant-header-actions {
   display: flex;
   align-items: center;
