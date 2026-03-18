@@ -43,5 +43,12 @@
     </div>
   </div>
 
+  <button class="eco-btn" [class.active]="isEcoMode" (click)="toggleEcoMode()">
+    <span class="icon material-symbols-rounded">eco</span>
+    <span class="label">
+      {{ isEcoMode ? 'Mode éco activé' : 'Activer mode éco' }}
+    </span>
+  </button>
+
   <button class="logout-btn" (click)="logout()">Deconnexion</button>
 </aside>

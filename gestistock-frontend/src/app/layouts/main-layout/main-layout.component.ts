@@ -12,13 +12,22 @@ import { AssistantWidgetComponent } from '../../shared/assistant-widget/assistan
   styleUrl: './main-layout.component.css'
 })
 export class MainLayoutComponent implements OnInit {
+  isEcoMode = false;
+
   ngOnInit(): void {
     const ecoMode = localStorage.getItem('eco_mode');
 
     if (ecoMode === 'true') {
       document.body.classList.add('eco-mode');
+      this.isEcoMode = true;
     } else {
       document.body.classList.remove('eco-mode');
+      this.isEcoMode = false;
     }
+
+    window.addEventListener('eco-mode-changed', (event: Event) => {
+      const customEvent = event as CustomEvent<boolean>;
+      this.isEcoMode = Boolean(customEvent.detail);
+    });
   }
 }

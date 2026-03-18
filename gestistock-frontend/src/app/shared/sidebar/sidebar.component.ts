@@ -41,6 +41,10 @@ export class SidebarComponent {
       document.body.classList.remove('eco-mode');
       localStorage.setItem('eco_mode', 'false');
     }
+
+    window.dispatchEvent(
+      new CustomEvent('eco-mode-changed', { detail: this.isEcoMode })
+    );
   }
 
   logout(): void {

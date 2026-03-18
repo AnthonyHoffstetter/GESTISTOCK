@@ -161,6 +161,47 @@
   outline-offset: 2px;
 }
 
+.eco-btn {
+  margin-top: 16px;
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid rgba(16, 155, 150, 0.35);
+  border-radius: 12px;
+  background: rgba(16, 155, 150, 0.12);
+  color: #b7eff0;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.eco-btn:hover {
+  background: rgba(16, 155, 150, 0.2);
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(16, 155, 150, 0.18);
+  transform: translateY(-1px);
+}
+
+.eco-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.eco-btn:focus-visible {
+  outline: 2px solid rgba(16, 155, 150, 0.7);
+  outline-offset: 2px;
+}
+
+.eco-btn.active {
+  background: rgba(16, 155, 150, 0.28);
+  color: #ffffff;
+  border-color: rgba(16, 155, 150, 0.65);
+  box-shadow: 0 10px 22px rgba(16, 155, 150, 0.18);
+}
+
 @media (max-width: 900px) {
   .sidebar {
     padding-inline: 10px;
@@ -191,5 +232,12 @@
     color: #fca5a5;
     cursor: pointer;
     font-weight: 600;
+  }
+
+  .eco-btn {
+    margin-top: 14px;
+    border: none;
+    background: rgba(16, 155, 150, 0.16);
+    color: #b7eff0;
   }
 }
