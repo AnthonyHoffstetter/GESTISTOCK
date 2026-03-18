@@ -250,41 +250,52 @@ function buildFallbackResponse(intent, data) {
 }
 
 async function callOllama(userQuestion, intent, data) {
-  const systemPrompt =
-    "Tu es l'assistant GESTISTOCK. " +
-    "Réponds uniquement en français. " +
-    "Réponds de façon courte, claire, professionnelle et utile. " +
-    "Base-toi uniquement sur les données fournies. " +
-    "N'invente jamais d'informations. " +
-    "Si les données sont insuffisantes, dis-le clairement. " +
-    "Ne parle ni de JSON, ni d'API, ni de technique interne.";
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
 
-  const userPrompt =
-    `Question utilisateur : ${userQuestion}\n\n` +
-    `Type de demande : ${intent}\n\n` +
-    `Données métier :\n${JSON.stringify(data, null, 2)}\n\n` +
-    `Consigne : rédige une réponse naturelle, fiable et concise.`;
+  try {
+    const systemPrompt =
+      "Tu es l'assistant GESTISTOCK. " +
+      "Réponds uniquement en français. " +
+      "Tu dois toujours rédiger la réponse finale comme une vraie IA professionnelle. " +
+      "Utilise uniquement les données métier fournies. " +
+      "N'invente jamais aucune information. " +
+      "Tu ne dois jamais contredire les données fournies. " +
+      "Si une donnée manque, dis-le clairement. " +
+      "Sois concise, claire, naturelle et utile. " +
+      "Quand c'est pertinent, ajoute une courte recommandation métier. " +
+      "Ne parle ni de JSON, ni d'API, ni de technique interne.";
 
-  const response = await fetch(`${OLLAMA_URL}/api/chat`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: OLLAMA_MODEL,
-      stream: false,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt }
-      ]
-    })
-  });
+    const userPrompt =
+      `Question utilisateur : ${userQuestion}\n\n` +
+      `Type de demande : ${intent}\n\n` +
+      `Données métier validées :\n${JSON.stringify(data, null, 2)}\n\n` +
+      `Consigne finale : rédige une réponse naturelle, professionnelle, fiable et courte à partir de ces seules données.`;
 
-  if (!response.ok) {
-    const details = await response.text();
-    throw new Error(`Ollama error: ${details}`);
+    const response = await fetch(`${OLLAMA_URL}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
+      body: JSON.stringify({
+        model: OLLAMA_MODEL,
+        stream: false,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt }
+        ]
+      })
+    });
+
+    if (!response.ok) {
+      const details = await response.text();
+      throw new Error(`Ollama error: ${details}`);
+    }
+
+    const result = await response.json();
+    return result?.message?.content?.trim() || '';
+  } finally {
+    clearTimeout(timeout);
   }
-
-  const result = await response.json();
-  return result?.message?.content?.trim() || '';
 }
 
 async function getBusinessData(intent, message) {
