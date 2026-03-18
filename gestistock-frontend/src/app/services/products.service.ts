@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
 
 export interface Product {
   id_produit: number;
@@ -35,10 +36,19 @@ export interface DeleteProductResponse {
   providedIn: 'root'
 })
 export class ProductsService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken() || '';
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+  }
 
   getProducts(): Observable<ProductsResponse> {
-    return this.http.get<ProductsResponse>(`${environment.apiUrl}/products`);
+    return this.http.get<ProductsResponse>(`${environment.apiUrl}/products`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   createProduct(payload: {
@@ -52,11 +62,14 @@ export class ProductsService {
   }): Observable<CreateProductResponse> {
     return this.http.post<CreateProductResponse>(
       `${environment.apiUrl}/products`,
-      payload
+      payload,
+      { headers: this.getAuthHeaders() }
     );
   }
 
   deleteProduct(id: number): Observable<DeleteProductResponse> {
-    return this.http.delete<DeleteProductResponse>(`${environment.apiUrl}/products/${id}`);
+    return this.http.delete<DeleteProductResponse>(`${environment.apiUrl}/products/${id}`, {
+      headers: this.getAuthHeaders()
+    });
   }
 }

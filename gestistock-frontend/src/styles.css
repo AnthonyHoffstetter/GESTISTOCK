@@ -11,6 +11,33 @@ body {
   overflow-x: hidden;
 }
 
+body.eco-mode {
+  background-color: #07131a;
+}
+
+body.eco-mode * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+body.eco-mode .sidebar {
+  background: #071720;
+}
+
+body.eco-mode .menu-link,
+body.eco-mode .logout-btn,
+body.eco-mode .eco-btn {
+  box-shadow: none !important;
+}
+
+body.eco-mode .menu-link:hover,
+body.eco-mode .logout-btn:hover,
+body.eco-mode .eco-btn:hover {
+  transform: none !important;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }

@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CategoriesService, Category } from '../../services/categories.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-categories',
@@ -15,13 +16,15 @@ export class CategoriesPage implements OnInit {
   saving = signal(false);
   error = signal('');
   success = signal('');
+  isAdmin = false;
 
   categories: Category[] = [];
   form: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
+    private authService: AuthService
   ) {
     this.form = this.fb.group({
       nom_categorie: ['', [Validators.required, Validators.minLength(2)]]
@@ -29,6 +32,7 @@ export class CategoriesPage implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isAdmin = this.authService.hasRole('Admin');
     this.loadCategories();
   }
 

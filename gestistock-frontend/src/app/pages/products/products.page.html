@@ -1,4 +1,4 @@
-<div class="products-page">
+<div class="products-page" [class.readonly]="!isAdmin">
   <header class="page-header">
     <div>
       <h1>Produits</h1>
@@ -7,7 +7,7 @@
   </header>
 
   <section class="page-grid">
-    <article class="panel">
+    <article class="panel" *ngIf="isAdmin">
       <div class="panel-header">
         <h2>Ajouter un produit</h2>
       </div>
@@ -96,7 +96,7 @@
               <th>Prix</th>
               <th>Stock</th>
               <th>Min</th>
-              <th>Action</th>
+              <th *ngIf="isAdmin">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -107,7 +107,7 @@
               <td>{{ product.prix }} €</td>
               <td>{{ product.quantite_stock }}</td>
               <td>{{ product.stock_minimum }}</td>
-              <td>
+              <td *ngIf="isAdmin">
                 <button class="delete-btn" type="button" (click)="deleteProduct(product)">
                   Supprimer
                 </button>

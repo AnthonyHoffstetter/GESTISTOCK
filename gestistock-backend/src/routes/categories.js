@@ -1,9 +1,10 @@
 const express = require('express');
 const { getPool } = require('../db');
+const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
     const dbPool = getPool();
     const [rows] = await dbPool.query(`
@@ -25,7 +26,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, authorizeRoles('Admin'), async (req, res) => {
   try {
     const { nom_categorie } = req.body || {};
 
@@ -73,7 +74,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticateToken, authorizeRoles('Admin'), async (req, res) => {
   try {
     const { id } = req.params;
     const dbPool = getPool();

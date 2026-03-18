@@ -5,6 +5,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { ProductsService, Product } from '../../services/products.service';
 import { CategoriesService, Category } from '../../services/categories.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-products',
@@ -19,6 +20,7 @@ export class ProductsPage implements OnInit {
   saving = signal(false);
   error = signal('');
   success = signal('');
+  isAdmin = false;
 
   products: Product[] = [];
   categories: Category[] = [];
@@ -28,7 +30,8 @@ export class ProductsPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private productsService: ProductsService,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
+    private authService: AuthService
   ) {
 
     this.form = this.fb.group({
@@ -44,6 +47,7 @@ export class ProductsPage implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isAdmin = this.authService.hasRole('Admin');
     this.loadCategories();
     this.loadProducts();
   }

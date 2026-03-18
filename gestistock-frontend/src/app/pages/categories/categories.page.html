@@ -1,4 +1,4 @@
-<div class="categories-page">
+<div class="categories-page" [class.readonly]="!isAdmin">
   <header class="page-header">
     <div>
       <h1>Catégories</h1>
@@ -7,7 +7,7 @@
   </header>
 
   <section class="page-grid">
-    <article class="panel">
+    <article class="panel" *ngIf="isAdmin">
       <div class="panel-header">
         <h2>Ajouter une catégorie</h2>
       </div>
@@ -58,7 +58,7 @@
             <strong>{{ category.nom_categorie }}</strong>
           </div>
 
-          <button class="delete-btn" type="button" (click)="deleteCategory(category)">
+          <button class="delete-btn" type="button" (click)="deleteCategory(category)" *ngIf="isAdmin">
             Supprimer
           </button>
         </div>
