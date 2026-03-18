@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
 import { AssistantWidgetComponent } from '../../shared/assistant-widget/assistant-widget.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -13,8 +14,12 @@ import { AssistantWidgetComponent } from '../../shared/assistant-widget/assistan
 })
 export class MainLayoutComponent implements OnInit {
   isEcoMode = false;
+  isAdmin = false;
+
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.isAdmin = this.authService.hasRole('Admin');
     const ecoMode = localStorage.getItem('eco_mode');
 
     if (ecoMode === 'true') {
@@ -29,5 +34,9 @@ export class MainLayoutComponent implements OnInit {
       const customEvent = event as CustomEvent<boolean>;
       this.isEcoMode = Boolean(customEvent.detail);
     });
+  }
+
+  get showAssistantWidget(): boolean {
+    return this.isAdmin && !this.isEcoMode;
   }
 }

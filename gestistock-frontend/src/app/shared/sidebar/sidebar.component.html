@@ -10,15 +10,17 @@
   </div>
 
   <nav class="menu">
-    <a
-      *ngFor="let item of menuItems"
-      [routerLink]="item.path"
-      routerLinkActive="active"
-      class="menu-link"
-    >
-      <span class="icon material-symbols-rounded">{{ item.icon }}</span>
-      <span class="label">{{ item.label }}</span>
-    </a>
+    <ng-container *ngFor="let item of menuItems">
+      <a
+        *ngIf="canShowMenuItem(item)"
+        [routerLink]="item.path"
+        routerLinkActive="active"
+        class="menu-link"
+      >
+        <span class="icon material-symbols-rounded">{{ item.icon }}</span>
+        <span class="label">{{ item.label }}</span>
+      </a>
+    </ng-container>
 
     <ng-container *ngIf="authService.hasRole('Admin')">
       <a

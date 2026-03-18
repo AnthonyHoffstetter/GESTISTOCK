@@ -17,4 +17,16 @@ function authenticateToken(req, res, next) {
   }
 }
 
-module.exports = { authenticateToken };
+function authorizeRoles(...allowedRoles) {
+  return (req, res, next) => {
+    const role = req?.user?.role;
+
+    if (!role || !allowedRoles.includes(role)) {
+      return res.status(403).json({ ok: false, message: 'Accès refusé.' });
+    }
+
+    return next();
+  };
+}
+
+module.exports = { authenticateToken, authorizeRoles };

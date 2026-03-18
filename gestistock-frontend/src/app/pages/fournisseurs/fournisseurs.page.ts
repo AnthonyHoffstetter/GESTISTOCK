@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FournisseursService, Fournisseur } from '../../services/fournisseurs.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-fournisseurs',
@@ -18,12 +19,14 @@ export class FournisseursPage implements OnInit {
   saving = signal(false);
   success = signal('');
   error = signal('');
+  isAdmin = false;
 
   form: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private fournisseursService: FournisseursService
+    private fournisseursService: FournisseursService,
+    private authService: AuthService
   ) {
     this.form = this.fb.group({
       nom_complet: ['', [Validators.required]],
@@ -35,6 +38,7 @@ export class FournisseursPage implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isAdmin = this.authService.hasRole('Admin');
     this.loadFournisseurs();
   }
 

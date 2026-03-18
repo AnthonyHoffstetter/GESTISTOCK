@@ -1,8 +1,11 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const { getPool } = require('../db');
+const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 
 const router = express.Router();
+
+router.use(authenticateToken, authorizeRoles('Admin'));
 
 router.get('/', async (req, res) => {
   try {

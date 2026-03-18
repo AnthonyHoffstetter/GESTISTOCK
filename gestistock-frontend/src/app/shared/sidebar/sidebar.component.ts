@@ -17,14 +17,19 @@ export class SidebarComponent {
     this.isEcoMode = localStorage.getItem('eco_mode') === 'true';
   }
 
-  menuItems = [
-    { label: 'Tableau de bord', path: '/app/dashboard', icon: 'space_dashboard' },
-    { label: 'Produits', path: '/app/products', icon: 'inventory_2' },
-    { label: 'Categories', path: '/app/categories', icon: 'category' },
-    { label: 'Fournisseurs', path: '/app/fournisseurs', icon: 'local_shipping' },
-    { label: 'Entrees de stock', path: '/app/stock-in', icon: 'move_to_inbox' },
-    { label: 'Sorties de stock', path: '/app/stock-out', icon: 'outbox' },
-    { label: 'Historique', path: '/app/history', icon: 'history' }
+  menuItems: Array<{
+    label: string;
+    path: string;
+    icon: string;
+    roles?: Array<'Admin' | 'Mag'>;
+  }> = [
+    { label: 'Tableau de bord', path: '/app/dashboard', icon: 'space_dashboard', roles: ['Admin', 'Mag'] },
+    { label: 'Produits', path: '/app/products', icon: 'inventory_2', roles: ['Admin', 'Mag'] },
+    { label: 'Categories', path: '/app/categories', icon: 'category', roles: ['Admin', 'Mag'] },
+    { label: 'Fournisseurs', path: '/app/fournisseurs', icon: 'local_shipping', roles: ['Admin', 'Mag'] },
+    { label: 'Entrees de stock', path: '/app/stock-in', icon: 'move_to_inbox', roles: ['Admin', 'Mag'] },
+    { label: 'Sorties de stock', path: '/app/stock-out', icon: 'outbox', roles: ['Admin', 'Mag'] },
+    { label: 'Historique', path: '/app/history', icon: 'history', roles: ['Admin', 'Mag'] }
   ];
 
   adminItems = [
@@ -45,6 +50,15 @@ export class SidebarComponent {
     window.dispatchEvent(
       new CustomEvent('eco-mode-changed', { detail: this.isEcoMode })
     );
+  }
+
+  canShowMenuItem(item: { roles?: Array<'Admin' | 'Mag'> }): boolean {
+    if (!item.roles || item.roles.length === 0) {
+      return true;
+    }
+
+    const user = this.authService.getUser();
+    return !!user && item.roles.includes(user.role);
   }
 
   logout(): void {
